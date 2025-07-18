@@ -36,7 +36,11 @@ Config.NotifyDuration = 3000
 -- Play sound on notifications (true/false)
 Config.NotifySound = true
 
-License
-Feel free to use and modify this script for your own server. Attribution appreciated but not required.
-Author  :-Lancer
-Discord :- https://discord.gg/Wtsppkrc4D
+
+**📜 License**
+This resource is released for public and educational use under the MIT license. Attribution to Lancer is appreciated. Do not resell or repackage without permission.
+
+**📞 Support**
+💬 Discord: [discord.gg/lancerhud](https://discord.gg/x2nBqmEU)
+
+🧑‍💻 GitHub:[https://github.com/Lancer-GWL](https://github.com/Lancer-GWL)
