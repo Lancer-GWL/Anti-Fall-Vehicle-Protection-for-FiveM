@@ -37,10 +37,10 @@ Config.NotifyDuration = 3000
 Config.NotifySound = true
 
 
-**📜 License**
+## 📜 License
 This resource is released for public and educational use under the MIT license. Attribution to Lancer is appreciated. Do not resell or repackage without permission.
 
-**📞 Support**
+## 📞 Support
 💬 Discord: [discord.gg/lancerhud](https://discord.gg/x2nBqmEU)
 
 🧑‍💻 GitHub:[https://github.com/Lancer-GWL](https://github.com/Lancer-GWL)
