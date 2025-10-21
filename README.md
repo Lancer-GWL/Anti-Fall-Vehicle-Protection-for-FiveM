@@ -20,6 +20,13 @@ Prevents players from accidentally falling off vehicles at low speeds, with conf
 2. Add the following line to your `server.cfg`:
 3. Restart your server or resource.
 
+### 📜 License
+This resource is released for public and educational use under the MIT license. Attribution to Lancer is appreciated. Do not resell or repackage without permission.
+
+# 📞 Support
+💬 Discord: https://discord.gg/fbxZaRBjHh
+
+
 ## Configuration
 
 Edit `config.lua` to adjust settings:
@@ -36,8 +43,3 @@ Config.NotifyDuration = 3000
 -- Play sound on notifications (true/false)
 Config.NotifySound = true
 
-# 📜 License
-This resource is released for public and educational use under the MIT license. Attribution to Lancer is appreciated. Do not resell or repackage without permission.
-
-# 📞 Support
-💬 Discord: https://discord.gg/fbxZaRBjHh
