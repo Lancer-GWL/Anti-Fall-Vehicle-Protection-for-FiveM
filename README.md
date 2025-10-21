@@ -34,8 +34,7 @@ Config.FallOffSpeed = 250
 Config.NotifyDuration = 3000
 
 -- Play sound on notifications (true/false)
-Config.NotifySound = true
-
+Config.NotifySound = true```
 
 ## 📜 License
 This resource is released for public and educational use under the MIT license. Attribution to Lancer is appreciated. Do not resell or repackage without permission.
