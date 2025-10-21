@@ -41,6 +41,6 @@ Config.NotifySound = true
 This resource is released for public and educational use under the MIT license. Attribution to Lancer is appreciated. Do not resell or repackage without permission.
 
 ## 📞 Support
-💬 Discord: [discord.gg/lancerhud](https://discord.gg/x2nBqmEU)
+💬 Discord: https://discord.gg/fbxZaRBjHh
 
 🧑‍💻 GitHub:[https://github.com/Lancer-GWL](https://github.com/Lancer-GWL)
