@@ -42,5 +42,3 @@ This resource is released for public and educational use under the MIT license. 
 
 ## 📞 Support
 💬 Discord: https://discord.gg/fbxZaRBjHh
-
-🧑‍💻 GitHub:[https://github.com/Lancer-GWL](https://github.com/Lancer-GWL)
