@@ -20,10 +20,10 @@ Prevents players from accidentally falling off vehicles at low speeds, with conf
 2. Add the following line to your `server.cfg`:
 3. Restart your server or resource.
 
-### 📜 License
+## 📜 License
 This resource is released for public and educational use under the MIT license. Attribution to Lancer is appreciated. Do not resell or repackage without permission.
 
-# 📞 Support
+## 📞 Support
 💬 Discord: https://discord.gg/fbxZaRBjHh
 
 
