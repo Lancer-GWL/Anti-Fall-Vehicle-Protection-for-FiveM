@@ -1,115 +1,84 @@
-local fallOffSpeed = Config.FallOffSpeed or 250
-local notifyDuration = Config.NotifyDuration or 3000
-local notifySound = Config.NotifySound == nil and true or Config.NotifySound
-
-local antiFallEnabled = true
-local notifyTimer = 0
 local notifyText = ""
+local notifyTimer = 0
 local notifyAlpha = 255
 
-local wasInVehicle = false
-
--- Play notification sound (default GTA frontend sound)
-local function playNotifySound()
-    if notifySound then
-        PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
-    end
-end
-
--- Show on-screen notification (top-right)
 local function showNotify(text)
     notifyText = text
-    notifyTimer = GetGameTimer() + notifyDuration
+    notifyTimer = GetGameTimer() + 1000
     notifyAlpha = 255
-    playNotifySound()
 end
 
--- Draw notification on screen
-Citizen.CreateThread(function()
+CreateThread(function()
     while true do
-        Citizen.Wait(0)
+        Wait(0)
+
         if notifyTimer > GetGameTimer() then
             local timeLeft = notifyTimer - GetGameTimer()
-            if timeLeft < 500 then -- Fade out last 0.5 seconds
+
+            if timeLeft < 500 then
                 notifyAlpha = math.floor((timeLeft / 500) * 255)
             end
 
-            SetTextFont(4)
-            SetTextProportional(0)
-            SetTextScale(0.35, 0.35)
-            SetTextColour(255, 255, 255, notifyAlpha)
-            SetTextDropshadow(0, 0, 0, 0, notifyAlpha)
-            SetTextEdge(1, 0, 0, 0, notifyAlpha)
-            SetTextDropShadow()
+            SetTextFont(0)
+            SetTextProportional(1)
+            SetTextScale(0.3, 0.3)
+            SetTextColour(255, 0, 0, notifyAlpha)
+            SetTextEdge(1, 255, 255, 255, notifyAlpha)
             SetTextOutline()
             SetTextRightJustify(true)
-            SetTextWrap(0.0, 0.95)
+            SetTextWrap(0.0, 0.98)
             BeginTextCommandDisplayText("STRING")
             AddTextComponentSubstringPlayerName(notifyText)
-            EndTextCommandDisplayText(0.95, 0.05)
+            EndTextCommandDisplayText(0.98, 0.05)
         end
     end
 end)
 
--- Command: /fall - Enable falling off vehicles (disable anti-fall)
-RegisterCommand("fall", function()
-    antiFallEnabled = false
-    showNotify("~r~Falling off vehicles is now ~h~ENABLED~r~.")
-end)
+CreateThread(function()
+    local wasInVehicle = false
+    local lastVehicle = nil
 
--- Command: /unfall - Disable falling off vehicles (enable anti-fall)
-RegisterCommand("unfall", function()
-    antiFallEnabled = true
-    showNotify("~g~Falling off vehicles is now ~h~DISABLED~g~.")
-end)
-
--- Command: /fallstatus - Show current anti-fall status
-RegisterCommand("fallstatus", function()
-    if antiFallEnabled then
-        showNotify("~g~Anti-fall protection is ~h~ENABLED~g~.")
-    else
-        showNotify("~r~Anti-fall protection is ~h~DISABLED~r~.")
-    end
-end)
-
--- Main thread: monitor vehicle and player ragdoll state
-Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(0)
+        Wait(150)
 
-        local playerPed = PlayerPedId()
-        local inVehicle = IsPedInAnyVehicle(playerPed, false)
+        local ped = PlayerPedId()
+        local inVehicle = IsPedInAnyVehicle(ped, false)
 
-        -- Detect if player just fell off vehicle
-        if wasInVehicle and not inVehicle then
-            if IsPedRagdoll(playerPed) or IsPedFalling(playerPed) then
-                showNotify("~r~You have fallen off the vehicle!")
+        if inVehicle then
+            local vehicle = GetVehiclePedIsIn(ped, false)
+
+            SetPedCanRagdoll(ped, false)
+            SetPedCanRagdollFromPlayerImpact(ped, false)
+            SetPedCanBeKnockedOffVehicle(ped, 1)
+            SetEntityInvincible(ped, true)
+
+            SetEntityInvincible(vehicle, true)
+            SetVehicleTyresCanBurst(vehicle, false)
+            SetVehicleEngineCanDegrade(vehicle, false)
+            SetVehicleEngineHealth(vehicle, 1000.0)
+            SetVehicleBodyHealth(vehicle, 1000.0)
+
+            if not wasInVehicle then
+                showNotify("~g~Anti-fall protection ~h~ENABLED")
             end
-        end
-        wasInVehicle = inVehicle
 
-        if inVehicle and antiFallEnabled then
-            local vehicle = GetVehiclePedIsIn(playerPed, false)
-            local speed = GetEntitySpeed(vehicle) * 3.6 -- Convert m/s to km/h
-
-            if speed <= fallOffSpeed then
-                -- Prevent falling off
-                SetPedCanRagdollFromPlayerImpact(playerPed, false)
-                SetPedCanRagdoll(playerPed, false)
-                SetPedConfigFlag(playerPed, 32, false)
-                SetPedConfigFlag(playerPed, 33, true)
-                SetPedConfigFlag(playerPed, 60, false)
-            else
-                -- Allow falling off at high speed
-                SetPedCanRagdollFromPlayerImpact(playerPed, true)
-                SetPedCanRagdoll(playerPed, true)
-                SetPedConfigFlag(playerPed, 33, false)
-            end
+            lastVehicle = vehicle
         else
-            -- Reset flags when not in vehicle or protection disabled
-            SetPedCanRagdollFromPlayerImpact(playerPed, true)
-            SetPedCanRagdoll(playerPed, true)
-            SetPedConfigFlag(playerPed, 33, false)
+            if wasInVehicle then
+                SetPedCanRagdoll(ped, true)
+                SetPedCanRagdollFromPlayerImpact(ped, true)
+                SetEntityInvincible(ped, false)
+
+                if lastVehicle and DoesEntityExist(lastVehicle) then
+                    SetEntityInvincible(lastVehicle, false)
+                    SetVehicleTyresCanBurst(lastVehicle, true)
+                    SetVehicleEngineCanDegrade(lastVehicle, true)
+                end
+
+                showNotify("~r~Protection ~h~DISABLED")
+            end
         end
+
+        wasInVehicle = inVehicle
     end
 end)
